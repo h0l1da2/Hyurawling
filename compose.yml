@@ -1,0 +1,15 @@
+version: '0.1'
+
+services:
+  hyurawling:
+    image: hyurawling-docker
+    # 데이터 볼륨, docker run -v
+    #    volumes:
+    #      -
+    # 환경 변수 설정, 이름: 값
+#    environment:
+
+# 데이터 볼륨 생성
+#volumes:
+
+
