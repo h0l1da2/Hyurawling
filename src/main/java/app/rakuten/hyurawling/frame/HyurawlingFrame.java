@@ -1,20 +1,26 @@
 package app.rakuten.hyurawling.frame;
 
+import app.rakuten.hyurawling.service.CrawlingService;
+import app.rakuten.hyurawling.service.CrawlingServiceImpl;
+import app.rakuten.hyurawling.vo.ProgramFields;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 
 public class HyurawlingFrame extends JFrame {
     private JTextField urlTextField;
     private JTextField minTextField;
     private JTextField maxTextField;
     private JTextField marginTextField;
-    private JTextField commissionTextField;
-    private JTextField shippingTextField;
+    private JTextField coupangCommissionTextField;
+    private JTextField deliveryTextField;
     private JTextField fileNameTextField;
     private JTextField folderPathTextField;
+    private CrawlingService crawlingService = new CrawlingServiceImpl();
 
     public HyurawlingFrame() {
 
@@ -65,15 +71,15 @@ public class HyurawlingFrame extends JFrame {
         add(new JLabel("쿠팡 수수료:"), gbc);
 
         gbc.gridy++;
-        commissionTextField = new JTextField();
-        add(commissionTextField, gbc);
+        coupangCommissionTextField = new JTextField();
+        add(coupangCommissionTextField, gbc);
 
         gbc.gridy++;
         add(new JLabel("배송비:"), gbc);
 
         gbc.gridy++;
-        shippingTextField = new JTextField();
-        add(shippingTextField, gbc);
+        deliveryTextField = new JTextField();
+        add(deliveryTextField, gbc);
 
         gbc.gridy++;
         add(new JLabel("파일 이름:"), gbc);
@@ -103,6 +109,41 @@ public class HyurawlingFrame extends JFrame {
         gbc.gridy++;
         JButton startButton = new JButton("시작하기");
         add(startButton, gbc);
+
+        startButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String url = urlTextField.getText();
+                String minPage = minTextField.getText();
+                String maxPage = maxTextField.getText();
+                String margin = marginTextField.getText();
+                String coupangCommission = coupangCommissionTextField.getText();
+                String delivery = deliveryTextField.getText();
+                String fileName = fileNameTextField.getText();
+                String folderPath = folderPathTextField.getText();
+
+                try {
+                    ProgramFields programFields = ProgramFields.builder()
+                            .url(url)
+                            .minPage(Integer.parseInt(minPage))
+                            .maxPage(Integer.parseInt(maxPage))
+                            .margin(Integer.parseInt(margin))
+                            .coupangCommission(Integer.parseInt(coupangCommission))
+                            .delivery(Integer.parseInt(delivery))
+                            .fileName(fileName)
+                            .folderPath(folderPath)
+                            .build();
+
+                    crawlingService.crawling(programFields);
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(HyurawlingFrame.this, "올바른 값을 넣었는지 확인해주세요.", "오류", JOptionPane.INFORMATION_MESSAGE);
+                } catch (IOException ex) {
+                    System.out.println("ex = " + ex);
+                }
+            }
+        });
+
+
         // 버튼 추가 (만약 필요하면)
         // gbc.gridy++;
         // JButton calculateButton = new JButton("계산하기");
