@@ -2,12 +2,14 @@ package app.rakuten.hyurawling.service;
 
 import app.rakuten.hyurawling.vo.Brand;
 import app.rakuten.hyurawling.vo.ProgramFields;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -55,9 +57,11 @@ public class CrawlingServiceImpl implements CrawlingService {
             } else {
                 brandName = "보세";
             }
+            // 제조사 (브랜드명은 제조사와 같다.)
+            String madeName = brandName;
 
             // 옵션
-
+            Elements table = targetPage.select("div.spacer--xFAdr block--2PK_L padding-all-small--24bWt");
         });
 
 
